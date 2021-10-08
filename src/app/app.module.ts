@@ -10,7 +10,7 @@ import { countries } from '../app/shared/countries';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

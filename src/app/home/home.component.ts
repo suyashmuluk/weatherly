@@ -80,6 +80,8 @@ export class HomeComponent implements OnInit {
         return '../../assets/mist.jpg';
       } else if (data['weather'][0]['main'] === 'Rain') {
         return '../../assets/rain.jpg';
+      } else if (data['weather'][0]['main'] === 'Fog') {
+        return '../../assets/fog.jpg';
       }
     }
   }
@@ -101,6 +103,9 @@ export class HomeComponent implements OnInit {
       } else if (data['weather'][0]['main'] === 'Mist') {
         this.weather_desc = data['weather'][0]['description'];
         return 'https://img.icons8.com/external-photo3ideastudio-flat-photo3ideastudio/96/000000/external-mist-natural-disaster-photo3ideastudio-flat-photo3ideastudio.png'
+      } else if (data['weather'][0]['main'] === 'Fog') {
+        this.weather_desc = data['weather'][0]['description'];
+        return 'https://img.icons8.com/emoji/48/000000/fog.png'
       }
     }
   }

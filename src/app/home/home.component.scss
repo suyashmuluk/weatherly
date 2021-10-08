@@ -7,20 +7,52 @@
     &_header {
         position: fixed;
         top: 0;
-        left: 2rem;
-        right: 0;
+        left: 0;
+        right: 28%;
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-        @include for_size(phone) {
-            left: 1rem;
+        @include for_size(ipad-to-phone) {
+            right: 1rem;
+        }
+
+        &_form{
+            display: none;
+
+            @include for_size(ipad-to-phone) {
+                display: block;
+                width: 170px;
+            }
+
+            &_input {
+                @extend .hero__flex_input;
+
+                &_field {
+                    @extend .hero__flex_input_field;
+
+                    @include for_size(phone) {
+                        width: 120px;
+                    }
+                }
+            }
+
+            &_error {
+                @extend .hero__flex_error;
+            }
+
+            &_btn {
+                @extend .hero__flex_btn;
+
+                @include for_size(phone) {
+                    padding: 12px 8px;
+                }
+            }
         }
     }
 
     &_data {
         flex: 0 1 75%;
-        // background-image: url("../../assets/default.jpg");
         background-size: cover;
         background-position: center;
 
@@ -33,14 +65,48 @@
         }
 
         &_title {
-            text-shadow: 1px 1px #8f8f8f;
-            color: #fff;
             @include fluid-type(320px, 1300px, 24px, 32px);
+            margin: 0;
+            background-color: #ffffffc2;
+            padding: 8px;
+            border-radius: 0 0 4px 0;
+        }
+
+        &_footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 4px;
+            font-size: 13px;
+            background-color: #fff;
+            text-align: center;
+            font-weight: 500;
+            border-radius: 0 4px 0 0;
+            white-space: break-spaces;
         }
     }
 
     &_menu {
         display: none;
+        background-color: #fff;
+        padding: 4px;
+        border-radius: 3px;
+
+        i {
+            color: #454242;
+            font-size: 20px;
+        }
+
+        @include for_size(ipad-to-phone) {
+            display: block;
+        }
+    }
+
+    &_form {
+            
+        @include for_size(ipad-to-phone) {
+            display: none;
+        }
     }
 
     &_form_block {
@@ -55,18 +121,6 @@
         &_title {
             font-weight: 500;
             margin-top: 1.5rem;
-        }
-
-        &_footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            padding: 4px 0;
-            font-size: 13px;
-            width: 100%;
-            background-color: #fff;
-            text-align: center;
-            font-weight: 500;
         }
     }
 
@@ -102,7 +156,7 @@
             border: 1px solid #8f8f8f;
             padding: 12px 8px;
             font-size: 16px;
-            border-radius: 4px 0 0 4px;
+            border-radius: 8px 0 0 8px;
             border-right: 0;
 
             &:focus,
@@ -131,10 +185,11 @@
         align-items: center;
         justify-content: center;
         border: 1px solid #8f8f8f;
-        border-radius: 0 4px 4px 0;
+        border-radius: 0 8px 8px 0;
 
         i {
             font-size: 16px;
+            color: #454242;
         }
 
         &:hover {
@@ -188,7 +243,6 @@
 
                 &_data {
                     padding: 0.5rem;
-                    color: #454242;
                     display: flex;
                     align-items: center;
 
@@ -208,8 +262,7 @@
 
     &_wind {
         margin-top: 3rem;
-        color: #454242;
-        height: calc(100vh - 185px);
+        height: calc(100vh - 170px);
         overflow: auto;
 
         h3 {
@@ -230,7 +283,7 @@
     }
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 991px) {
     .hero__flex_form_block {
         position: fixed;
         width: 250px;
@@ -239,23 +292,6 @@
         bottom: 0;
         top: 0;
         transition: all 0.3s ease-in-out;
-    }
-
-    .hero__flex_menu {
-        display: block;
-        position: absolute;
-        right: 2rem;
-        background-color: #fff;
-        padding: 4px;
-
-        @include for_size(phone) {
-            right: 1rem;
-        }
-
-        i {
-            color: #454242;
-            font-size: 20px;
-        }
     }
 }
 

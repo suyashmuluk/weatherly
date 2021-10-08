@@ -5,7 +5,22 @@
         <img [src]="setBgImg(weather_data)" alt="bg_img" *ngIf="weather_data_block && error_text !== 'city not found'"
             class="hero__flex_data_img">
         <div class="hero__flex_header">
-            <h1 class="hero__flex_data_title">Welcome to weatherly</h1>
+            <h1 class="hero__flex_data_title">weatherly</h1>
+
+            <form [formGroup]="city_form" class="hero__flex_header_form">
+                <div style="position: relative; display: flex; align-items: center;">
+                    <label for="city" class="hero__flex_header_form_input">
+                        <input type="text" placeholder="City Name eg. Pune" formControlName="city" class="hero__flex_header_form_input_field">
+                        <!-- <span class="hero__flex_header_form_input_label">City Name</span> -->
+                    </label>
+                    <div class="hero__flex_header_form_error">{{error_text}}</div>
+    
+                    <button (click)="getCityWeather()" class="hero__flex_header_form_btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+
             <div class="hero__flex_menu" (click)="toggleSidebar()" id="menu">
                 <i class="fas fa-bars" *ngIf="!close_icon"></i>
                 <i class="fas fa-times" *ngIf="close_icon"></i>
@@ -71,6 +86,10 @@
                 </table>
             </div>
         </div>
+        <div class="hero__flex_data_footer">
+            Data provided in part by OpenWeather & developed by
+            <a href="https://github.com/suyashmuluk" target="_blank">Suyash Muluk</a>
+        </div>
     </div>
 
     <div class="hero__flex_form_block" id="sidebar">
@@ -135,10 +154,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="hero__flex_form_block_footer">
-            Data provided in part by OpenWeather
         </div>
     </div>
 </div>
