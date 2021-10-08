@@ -121,6 +121,12 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  getCurrentTime(data) {
+    if(data) {
+      return (new Date(data['dt']* 1000)).toLocaleString();
+    }
+  }
+
   getOtherDetails(data, value) {
     if (data['main'] && value !== 'visibility') {
       if (value === 'feels_like') {

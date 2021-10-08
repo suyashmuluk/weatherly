@@ -41,6 +41,9 @@
                     {{weather_data?.name}},
                     <span>{{getCountry(weather_data)}}</span>
                 </div>
+                <div class="weather__data_temp_time">
+                    {{getCurrentTime(weather_data)}}
+                </div>
             </div>
 
             <div class="weather__data_temp">
@@ -96,7 +99,7 @@
         <form [formGroup]="city_form" class="hero__flex_form">
             <div style="position: relative; display: flex; align-items: center;">
                 <label for="city" class="hero__flex_input">
-                    <input type="text" placeholder="City Name eg. Pune" formControlName="city" class="hero__flex_input_field">
+                    <input type="text" placeholder="Enter city name" formControlName="city" class="hero__flex_input_field">
                     <!-- <span class="hero__flex_input_label">City Name</span> -->
                 </label>
                 <div class="hero__flex_error">{{error_text}}</div>
