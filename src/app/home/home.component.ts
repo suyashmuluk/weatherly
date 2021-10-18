@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
     @Inject('COUNTRIES') public country: any[]) { }
 
   ngOnInit(): void {
+    this.getCurrentCity();
     this.city_form = this.formBuilder.group({
       city: ['', Validators.required]
     });
@@ -28,6 +29,18 @@ export class HomeComponent implements OnInit {
 
   get formControls() {
     return this.city_form.controls;
+  }
+
+  getCurrentCity() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.showPosition);
+    } else { 
+      return false;
+    }
+  }
+
+  showPosition(position) {
+    console.log(position.coords.latitude);
   }
 
   getCityWeather() {
@@ -82,6 +95,8 @@ export class HomeComponent implements OnInit {
         return '../../assets/rain.jpg';
       } else if (data['weather'][0]['main'] === 'Fog') {
         return '../../assets/fog.jpg';
+      } else if (data['weather'][0]['main'] === 'Thunderstorm') {
+        return '../../assets/thunder.jpg';
       }
     }
   }
@@ -106,6 +121,9 @@ export class HomeComponent implements OnInit {
       } else if (data['weather'][0]['main'] === 'Fog') {
         this.weather_desc = data['weather'][0]['description'];
         return 'https://img.icons8.com/emoji/48/000000/fog.png'
+      } else if (data['weather'][0]['main'] === 'Thunderstorm') {
+        this.weather_desc = data['weather'][0]['description'];
+        return '<img src="https://img.icons8.com/external-justicon-flat-justicon/94/000000/external-thunderstorm-weather-justicon-flat-justicon.png"/>';
       }
     }
   }
