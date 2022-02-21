@@ -1,7 +1,6 @@
-import { Component, Inject, Injectable, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { WeatherService } from '../services/weather.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { countries } from '../shared/countries';
 
 @Component({
   selector: 'app-home',
@@ -15,13 +14,19 @@ export class HomeComponent implements OnInit {
   weather_data: any = {};
   weather_desc = "";
   close_icon = false;
+  dark_theme: boolean;
+  @ViewChildren('theme_changed') theme_changed!: QueryList<any>;
 
   constructor(private weather: WeatherService,
     private formBuilder: FormBuilder,
-    @Inject('COUNTRIES') public country: any[]) { }
+    @Inject('COUNTRIES') public country: any[]) {
+    this.getCurrentCity();
+    setTimeout(() => {
+      this.checkTheme();
+    }, 1000);
+  }
 
   ngOnInit(): void {
-    this.getCurrentCity();
     this.city_form = this.formBuilder.group({
       city: ['', Validators.required]
     });
@@ -31,16 +36,39 @@ export class HomeComponent implements OnInit {
     return this.city_form.controls;
   }
 
-  getCurrentCity() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.showPosition);
-    } else { 
-      return false;
+  checkTheme() {
+    if (JSON.parse(localStorage.getItem('dark_theme'))) {
+      this.dark_theme = true;
+      let parent = document.getElementById('parent_element');
+      parent.classList.add('dark_theme_text');
+      this.theme_changed.toArray().forEach(el => {
+        el.nativeElement.classList.add('dark_theme')
+      });
+    } else {
+      this.dark_theme = false;
     }
   }
 
-  showPosition(position) {
-    console.log(position.coords.latitude);
+  getCurrentCity() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+        this.weather.fetchCoordinatesWeather(lat, lon).subscribe(data => {
+          this.weather_data = data;
+          if (Object.keys(this.weather_data).length > 1) {
+            this.weather_data_block = true;
+            this.city_form.reset();
+            this.setImages(this.weather_data);
+            this.setBgImg(this.weather_data);
+          }
+        })
+      }, error => {
+        console.log("Error in fetching latitude and longitude");
+      });
+    } else {
+      return false;
+    }
   }
 
   getCityWeather() {
@@ -52,21 +80,22 @@ export class HomeComponent implements OnInit {
       this.error_text = '';
       this.weather.fetchWeather(this.city_form.value.city).subscribe((data) => {
         this.weather_data = data;
+        if (Object.keys(this.weather_data).length > 1) {
+          this.weather_data_block = true;
+          this.city_form.reset();
+          this.setImages(this.weather_data);
+          this.setBgImg(this.weather_data);
+        }
       }, error => {
         this.error_text = error.error.message;
       });
-      this.weather_data_block = true;
-      setTimeout(() => {
-        this.setImages(this.weather_data);
-        this.setBgImg(this.weather_data);
-      }, 500)
-      this.city_form.reset();
     }
   }
 
   convertTemp(data) {
-    if (data['main'])
-      return (data['main']['temp'] - 273.15).toString().slice(0, 2);
+    if (data['main']) {
+      return Math.round((data['main']['temp'] - 273.15));
+    }
   }
 
   getCountry(data) {
@@ -81,7 +110,6 @@ export class HomeComponent implements OnInit {
   }
 
   setBgImg(data) {
-    var bg_img = document.getElementById('bg_img');
     if (data['weather']) {
       if (data['weather'][0]['main'] === 'Clouds') {
         return '../../assets/cloudy.jpg';
@@ -97,6 +125,10 @@ export class HomeComponent implements OnInit {
         return '../../assets/fog.jpg';
       } else if (data['weather'][0]['main'] === 'Thunderstorm') {
         return '../../assets/thunder.jpg';
+      } else if (data['weather'][0]['main'] === 'Smoke') {
+        return '../../assets/smoky.jpg';
+      } else if (data['weather'][0]['main'] === 'Snow') {
+        return '../../assets/snow.jpg';
       }
     }
   }
@@ -123,7 +155,13 @@ export class HomeComponent implements OnInit {
         return 'https://img.icons8.com/emoji/48/000000/fog.png'
       } else if (data['weather'][0]['main'] === 'Thunderstorm') {
         this.weather_desc = data['weather'][0]['description'];
-        return '<img src="https://img.icons8.com/external-justicon-flat-justicon/94/000000/external-thunderstorm-weather-justicon-flat-justicon.png"/>';
+        return 'https://img.icons8.com/external-justicon-flat-justicon/94/000000/external-thunderstorm-weather-justicon-flat-justicon.png';
+      } else if (data['weather'][0]['main'] === 'Smoke') {
+        this.weather_desc = data['weather'][0]['description'];
+        return 'https://img.icons8.com/external-tulpahn-flat-tulpahn/64/000000/external-foggy-weather-tulpahn-flat-tulpahn.png'
+      } else if (data['weather'][0]['main'] === 'Snow') {
+        this.weather_desc = data['weather'][0]['description'];
+        return 'https://img.icons8.com/external-konkapp-flat-konkapp/64/000000/external-snow-natural-disaster-konkapp-flat-konkapp-1.png'
       }
     }
   }
@@ -140,15 +178,15 @@ export class HomeComponent implements OnInit {
   }
 
   getCurrentTime(data) {
-    if(data) {
-      return (new Date(data['dt']* 1000)).toLocaleString();
+    if (data) {
+      return (new Date(data['dt'] * 1000)).toLocaleString();
     }
   }
 
   getOtherDetails(data, value) {
     if (data['main'] && value !== 'visibility') {
       if (value === 'feels_like') {
-        return (data['main'][value] - 273.15).toString().slice(0, 2);
+        return Math.round((data['main'][value] - 273.15));
       } else {
         return data['main'][value];
       }
@@ -169,12 +207,32 @@ export class HomeComponent implements OnInit {
     let menu = document.getElementById('menu');
     sidebar.classList.toggle('open_sidebar');
 
-    if(sidebar.classList.contains('open_sidebar')) {
+    if (sidebar.classList.contains('open_sidebar')) {
       menu.classList.add('menu_position');
       this.close_icon = true;
     } else {
       menu.classList.remove('menu_position');
       this.close_icon = false;
+    }
+  }
+
+  toggleTheme(event?) {
+    let parent = document.getElementById('parent_element');
+    if ((event && event.target.checked)) {
+      this.dark_theme = true;
+      parent.classList.add('dark_theme_text');
+      this.theme_changed.toArray().forEach(el => {
+        el.nativeElement.classList.add('dark_theme')
+      });
+      localStorage.setItem('dark_theme', JSON.stringify(this.dark_theme));
+    } else {
+      this.dark_theme = false;
+      parent.classList.remove('dark_theme_text');
+
+      this.theme_changed.toArray().forEach(el => {
+        el.nativeElement.classList.remove('dark_theme')
+      });
+      localStorage.removeItem('dark_theme');
     }
   }
 

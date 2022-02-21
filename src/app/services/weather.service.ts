@@ -12,4 +12,8 @@ export class WeatherService {
   fetchWeather(data: any) {
     return this.http.get(environment.apiURL + 'q=' + data + '&appid=' + environment.appID);
   }
+
+  fetchCoordinatesWeather(lat: any, long: any) {
+    return this.http.get(environment.apiURL + 'lat=' + lat + '&lon=' + long + '&appid=' + environment.appID);
+  }
 }

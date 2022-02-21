@@ -1,4 +1,8 @@
-@use '../../assets/scss/' as *;
+@use "../../assets/scss/" as *;
+
+.parent_element {
+    color: #222222;
+}
 
 .hero__flex {
     height: 100vh;
@@ -17,7 +21,7 @@
             right: 1rem;
         }
 
-        &_form{
+        &_form {
             display: none;
 
             @include for_size(ipad-to-phone) {
@@ -65,7 +69,7 @@
         }
 
         &_title {
-            @include fluid-type(320px, 1300px, 24px, 32px);
+            @include fluid-font(24px, 32px);
             margin: 0;
             background-color: #ffffffc2;
             padding: 8px;
@@ -103,9 +107,92 @@
     }
 
     &_form {
-            
-        @include for_size(ipad-to-phone) {
-            display: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        form {
+            @include for_size(ipad-to-phone) {
+                display: none;
+            }
+        }
+
+        &_setting {
+            position: relative;
+
+            img {
+                cursor: pointer;
+            }
+
+            &_dropdown {
+                visibility: hidden;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                width: max-content;
+                background-color: #fff;
+                padding: 0 0.5rem;
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                @include for_size(ipad-to-phone) {
+                    left: 0;
+                    right: inherit;
+                }
+
+                &_title {
+                    @include fluid-font(12px, 14px);
+                }
+
+                input[type="checkbox"] {
+                    height: 0;
+                    width: 0;
+                    visibility: hidden;
+                }
+
+                label {
+                    cursor: pointer;
+                    text-indent: -9999px;
+                    width: 50px;
+                    height: 25px;
+                    background: grey;
+                    display: block;
+                    border-radius: 100px;
+                    position: relative;
+                }
+
+                label:after {
+                    content: "";
+                    position: absolute;
+                    top: 5px;
+                    left: 5px;
+                    width: 16px;
+                    height: 16px;
+                    background: #fff;
+                    border-radius: 50%;
+                    transition-duration: 0.3s;
+                    transition-property: transform, left, width;
+                }
+
+                input:checked + label {
+                    background: #bada55;
+                }
+
+                input:checked + label:after {
+                    left: calc(100% - 5px);
+                    transform: translateX(-100%);
+                }
+
+                label:active:after {
+                    width: 22px;
+                }
+            }
+
+            &:hover .hero__flex_form_setting_dropdown {
+                visibility: visible;
+            }
         }
     }
 
@@ -131,6 +218,12 @@
         width: 100%;
         background-size: cover;
         background-position: center;
+    }
+
+    &_input_container {
+        position: relative;
+        display: flex;
+        align-items: center;
     }
 
     &_input {
@@ -214,21 +307,21 @@
         background-color: #ffffffc2;
         border-radius: 5px;
         box-shadow: rgb(9 30 66 / 25%) 0px 4px 8px -2px, rgb(9 30 66 / 31%) 0px 0px 1px;
-        margin-bottom: .5rem;
-        
+        margin-bottom: 0.5rem;
+
         &:not(:last-child) {
             padding: 1rem;
             margin-right: 1rem;
         }
 
         &_info {
-            @include fluid-type(300px, 1300px, 18px, 24px);
+            @include fluid-font(18px, 24px);
             font-weight: 500;
             text-transform: capitalize;
         }
 
         &_city {
-            @include fluid-type(300px, 1300px, 14px, 18px);
+            @include fluid-font(14px, 18px);
         }
 
         &_time {
@@ -252,11 +345,11 @@
                     align-items: center;
 
                     &_text {
-                        @include fluid-type(300px, 1300px, 14px, 16px);
+                        @include fluid-font(14px, 16px);
                     }
 
                     &_info {
-                        @include fluid-type(300px, 1300px, 14px, 18px);
+                        @include fluid-font(14px, 18px);
                         font-weight: bold;
                         margin-right: 2px;
                     }
@@ -277,11 +370,11 @@
             margin: 0.5rem 0;
 
             &_text {
-                @include fluid-type(300px, 1300px, 14px, 16px);
+                @include fluid-font(14px, 16px);
             }
 
             &_title {
-                @include fluid-type(300px, 1300px, 16px, 18px);
+                @include fluid-font(16px, 18px);
                 font-weight: bold;
             }
         }
@@ -307,4 +400,12 @@
 .menu_position {
     position: absolute;
     right: 280px;
+}
+
+.dark_theme_text {
+    color: #fff;
+}
+
+.dark_theme {
+    background-color: #000000d1;
 }

@@ -1,159 +1,178 @@
-<div class="hero__flex">
-    <div class="hero__flex_data">
-        <img class="hero__flex_data_img" *ngIf="!weather_data_block || error_text === 'city not found'"
-            src="../../assets/default.jpg" alt="">
-        <img [src]="setBgImg(weather_data)" alt="bg_img" *ngIf="weather_data_block && error_text !== 'city not found'"
-            class="hero__flex_data_img">
-        <div class="hero__flex_header">
-            <h1 class="hero__flex_data_title">weatherly</h1>
+<div id="parent_element" class="parent_element">
+    <div class="hero__flex">
+        <div class="hero__flex_data">
+            <img class="hero__flex_data_img" *ngIf="!weather_data_block || error_text === 'city not found'"
+                src="../../assets/default.jpg" alt="">
+            <img [src]="setBgImg(weather_data)" alt="bg_img"
+                *ngIf="weather_data_block && error_text !== 'city not found'" class="hero__flex_data_img">
+            <div class="hero__flex_header">
+                <h1 class="hero__flex_data_title" #theme_changed>weatherly</h1>
 
-            <form [formGroup]="city_form" class="hero__flex_header_form">
-                <div style="position: relative; display: flex; align-items: center;">
-                    <label for="city" class="hero__flex_header_form_input">
-                        <input type="text" placeholder="City Name eg. Pune" formControlName="city" class="hero__flex_header_form_input_field">
-                        <!-- <span class="hero__flex_header_form_input_label">City Name</span> -->
-                    </label>
-                    <div class="hero__flex_header_form_error">{{error_text}}</div>
-    
-                    <button (click)="getCityWeather()" class="hero__flex_header_form_btn">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </form>
+                <form [formGroup]="city_form" class="hero__flex_header_form">
+                    <div style="position: relative; display: flex; align-items: center;">
+                        <label for="city" class="hero__flex_header_form_input">
+                            <input type="text" placeholder="City Name eg. Pune" formControlName="city"
+                                class="hero__flex_header_form_input_field">
+                            <!-- <span class="hero__flex_header_form_input_label">City Name</span> -->
+                        </label>
+                        <div class="hero__flex_header_form_error">{{error_text}}</div>
 
-            <div class="hero__flex_menu" (click)="toggleSidebar()" id="menu">
-                <i class="fas fa-bars" *ngIf="!close_icon"></i>
-                <i class="fas fa-times" *ngIf="close_icon"></i>
-            </div>
-        </div>
-        <div class="hero__flex_not_found" *ngIf="error_text === 'city not found'"></div>
+                        <button (click)="getCityWeather()" class="hero__flex_header_form_btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
 
-        <div class="weather__data" *ngIf="weather_data_block && error_text !== 'city not found'">
-            <div class="weather__data_temp">
-                <img [src]="setImages(weather_data)" />
-                <div style="display: flex;">
-                    <span class="weather__data_temp_info">
-                        {{weather_desc}}, {{convertTemp(weather_data)}}
-                    </span>
-                    <span class="weather__data_temp_unit">&#8451;</span>
-                </div>
-                <div class="weather__data_temp_city">
-                    {{weather_data?.name}},
-                    <span>{{getCountry(weather_data)}}</span>
-                </div>
-                <div class="weather__data_temp_time">
-                    {{getCurrentTime(weather_data)}}
+                <div class="hero__flex_menu" (click)="toggleSidebar()" id="menu">
+                    <i class="fas fa-bars" *ngIf="!close_icon"></i>
+                    <i class="fas fa-times" *ngIf="close_icon"></i>
                 </div>
             </div>
+            <div class="hero__flex_not_found" *ngIf="error_text === 'city not found'"></div>
 
-            <div class="weather__data_temp">
-                <table class="weather__data_temp__table">
-                    <tr class="weather__data_temp__table_row">
-                        <td style="border-right: 1px solid #dedede;">
-                            <div class="weather__data_temp__table_row_data">
-                                <span class="weather__data_temp__table_row_data_text">Feels like: </span>
-                                <span class="weather__data_temp__table_row_data_info">{{getOtherDetails(weather_data,
-                                    'feels_like')}}&#8451;</span>
-                                <img src="https://img.icons8.com/fluency/20/000000/temperature.png" />
-                            </div>
-                        </td>
-                        <td>
-                            <div class="weather__data_temp__table_row_data">
-                                <span class="weather__data_temp__table_row_data_text">Humidty: </span>
-                                <span class="weather__data_temp__table_row_data_info">{{getOtherDetails(weather_data,
-                                    'humidity')}}%</span>
-                                <img
-                                    src="https://img.icons8.com/external-justicon-flat-justicon/20/000000/external-humidity-weather-justicon-flat-justicon.png" />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="weather__data_temp__table_row">
-                        <td style="border-right: 1px solid #dedede;">
-                            <div class="weather__data_temp__table_row_data">
-                                <span class="weather__data_temp__table_row_data_text">Pressure: </span>
-                                <span class="weather__data_temp__table_row_data_info">{{getOtherDetails(weather_data,
-                                    'pressure')}}hPa</span>
-                                <img src="https://img.icons8.com/color/20/000000/pressure.png" />
-                            </div>
-                        </td>
-                        <td>
-                            <div class="weather__data_temp__table_row_data">
-                                <span class="weather__data_temp__table_row_data_text">Visibility: </span>
-                                <span class="weather__data_temp__table_row_data_info">{{getOtherDetails(weather_data,
-                                    'visibility')}}</span>
-                                <img
-                                    src="https://img.icons8.com/external-inipagistudio-mixed-inipagistudio/20/000000/external-visibility-weather-app-inipagistudio-mixed-inipagistudio.png" />
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="hero__flex_data_footer">
-            Data provided in part by OpenWeather & developed by
-            <a href="https://github.com/suyashmuluk" target="_blank">Suyash Muluk</a>
-        </div>
-    </div>
-
-    <div class="hero__flex_form_block" id="sidebar">
-        <form [formGroup]="city_form" class="hero__flex_form">
-            <div style="position: relative; display: flex; align-items: center;">
-                <label for="city" class="hero__flex_input">
-                    <input type="text" placeholder="Enter city name" formControlName="city" class="hero__flex_input_field">
-                    <!-- <span class="hero__flex_input_label">City Name</span> -->
-                </label>
-                <div class="hero__flex_error">{{error_text}}</div>
-
-                <button (click)="getCityWeather()" class="hero__flex_btn">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-        </form>
-
-        <div class="hero__flex_form_block_title">
-            Access current weather data of over 200K cities across the globe.
-        </div>
-        <div class="weather__data_wind" *ngIf="weather_data_block && error_text !== 'city not found'">
-            <h3>
-                Weather Details
-            </h3>
-            <img src="https://img.icons8.com/color/48/000000/wind.png" />
-            <div class="weather__data_wind_info">
-                <span class="weather__data_wind_info_text">Wind Speed: </span>
-                <span class="weather__data_wind_info_title">{{getWind(weather_data, 'speed')}}m/s</span>
-            </div>
-            <div class="weather__data_wind_info">
-                <span class="weather__data_wind_info_text">Wind Direction: </span>
-                <span class="weather__data_wind_info_title">{{getWind(weather_data, 'deg')}}&#176;</span>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <img src="https://img.icons8.com/office/48/000000/latitude.png" />
-                <div class="weather__data_wind_info">
-                    <span class="weather__data_wind_info_text">Latitude: </span>
-                    <span class="weather__data_wind_info_title">{{getCoords(weather_data, 'lat')}}</span>
-                </div>
-
-                <div class="weather__data_wind_info">
-                    <span class="weather__data_wind_info_text">Longitude: </span>
-                    <span class="weather__data_wind_info_title">{{getCoords(weather_data, 'lon')}}</span>
-                </div>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
-                <div>
-                    <img
-                        src="https://img.icons8.com/external-flatart-icons-flat-flatarticons/40/000000/external-sunrise-summer-flatart-icons-flat-flatarticons.png" />
-                    <div class="weather__data_wind_info">
-                        <span class="weather__data_wind_info_text">Sunrise: </span>
-                        <span class="weather__data_wind_info_title">{{getDayTime(weather_data, 'sunrise')}}</span>
+            <div class="weather__data" *ngIf="weather_data_block && error_text !== 'city not found'">
+                <div class="weather__data_temp" #theme_changed>
+                    <img [src]="setImages(weather_data)" />
+                    <div style="display: flex;">
+                        <span class="weather__data_temp_info">
+                            {{weather_desc}}, {{convertTemp(weather_data)}}
+                        </span>
+                        <span class="weather__data_temp_unit">&#8451;</span>
+                    </div>
+                    <div class="weather__data_temp_city">
+                        {{weather_data?.name}},
+                        <span>{{getCountry(weather_data)}}</span>
+                    </div>
+                    <div class="weather__data_temp_time">
+                        {{getCurrentTime(weather_data)}}
                     </div>
                 </div>
-                <div>
-                    <img src="https://img.icons8.com/cotton/40/000000/sunset--v2.png" />
+
+                <div class="weather__data_temp" #theme_changed>
+                    <table class="weather__data_temp__table">
+                        <tr class="weather__data_temp__table_row">
+                            <td style="border-right: 1px solid #dedede;">
+                                <div class="weather__data_temp__table_row_data">
+                                    <span class="weather__data_temp__table_row_data_text">Feels like: </span>
+                                    <span
+                                        class="weather__data_temp__table_row_data_info">{{getOtherDetails(weather_data,
+                                        'feels_like')}}&#8451;</span>
+                                    <img src="https://img.icons8.com/fluency/20/000000/temperature.png" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="weather__data_temp__table_row_data">
+                                    <span class="weather__data_temp__table_row_data_text">Humidty: </span>
+                                    <span
+                                        class="weather__data_temp__table_row_data_info">{{getOtherDetails(weather_data,
+                                        'humidity')}}%</span>
+                                    <img
+                                        src="https://img.icons8.com/external-justicon-flat-justicon/20/000000/external-humidity-weather-justicon-flat-justicon.png" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="weather__data_temp__table_row">
+                            <td style="border-right: 1px solid #dedede;">
+                                <div class="weather__data_temp__table_row_data">
+                                    <span class="weather__data_temp__table_row_data_text">Pressure: </span>
+                                    <span
+                                        class="weather__data_temp__table_row_data_info">{{getOtherDetails(weather_data,
+                                        'pressure')}}hPa</span>
+                                    <img src="https://img.icons8.com/color/20/000000/pressure.png" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="weather__data_temp__table_row_data">
+                                    <span class="weather__data_temp__table_row_data_text">Visibility: </span>
+                                    <span
+                                        class="weather__data_temp__table_row_data_info">{{getOtherDetails(weather_data,
+                                        'visibility')}}</span>
+                                    <img
+                                        src="https://img.icons8.com/external-inipagistudio-mixed-inipagistudio/20/000000/external-visibility-weather-app-inipagistudio-mixed-inipagistudio.png" />
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="hero__flex_data_footer" #theme_changed>
+                Data provided in part by OpenWeather & developed by
+                <a href="https://github.com/suyashmuluk" target="_blank">Suyash Muluk</a>
+            </div>
+        </div>
+
+        <div class="hero__flex_form_block" id="sidebar" #theme_changed>
+            <div class="hero__flex_form">
+                <form [formGroup]="city_form">
+                    <div class="hero__flex_input_container">
+                        <label for="city" class="hero__flex_input">
+                            <input type="text" placeholder="Enter city name" formControlName="city"
+                                class="hero__flex_input_field">
+                        </label>
+                        <div class="hero__flex_error">{{error_text}}</div>
+
+                        <button (click)="getCityWeather()" class="hero__flex_btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="hero__flex_form_setting">
+                    <img src="https://img.icons8.com/fluency/32/000000/settings.png" />
+
+                    <div class="hero__flex_form_setting_dropdown" #theme_changed>
+                        <h2 class="hero__flex_form_setting_dropdown_title">Dark Mode</h2>
+                        <input type="checkbox" id="switch" (change)="toggleTheme($event)" [checked]="dark_theme" />
+                        <label for="switch">Toggle</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero__flex_form_block_title">
+                Access current weather data of over 200K cities across the globe.
+            </div>
+            <div class="weather__data_wind" *ngIf="weather_data_block && error_text !== 'city not found'">
+                <h3>
+                    Weather Details
+                </h3>
+                <img src="https://img.icons8.com/color/48/000000/wind.png" />
+                <div class="weather__data_wind_info">
+                    <span class="weather__data_wind_info_text">Wind Speed: </span>
+                    <span class="weather__data_wind_info_title">{{getWind(weather_data, 'speed')}}m/s</span>
+                </div>
+                <div class="weather__data_wind_info">
+                    <span class="weather__data_wind_info_text">Wind Direction: </span>
+                    <span class="weather__data_wind_info_title">{{getWind(weather_data, 'deg')}}&#176;</span>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <img src="https://img.icons8.com/office/48/000000/latitude.png" />
                     <div class="weather__data_wind_info">
-                        <span class="weather__data_wind_info_text">Sunset: </span>
-                        <span class="weather__data_wind_info_title">{{getDayTime(weather_data, 'sunset')}}</span>
+                        <span class="weather__data_wind_info_text">Latitude: </span>
+                        <span class="weather__data_wind_info_title">{{getCoords(weather_data, 'lat')}}</span>
+                    </div>
+
+                    <div class="weather__data_wind_info">
+                        <span class="weather__data_wind_info_text">Longitude: </span>
+                        <span class="weather__data_wind_info_title">{{getCoords(weather_data, 'lon')}}</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
+                    <div>
+                        <img
+                            src="https://img.icons8.com/external-flatart-icons-flat-flatarticons/40/000000/external-sunrise-summer-flatart-icons-flat-flatarticons.png" />
+                        <div class="weather__data_wind_info">
+                            <span class="weather__data_wind_info_text">Sunrise: </span>
+                            <span class="weather__data_wind_info_title">{{getDayTime(weather_data, 'sunrise')}}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="https://img.icons8.com/cotton/40/000000/sunset--v2.png" />
+                        <div class="weather__data_wind_info">
+                            <span class="weather__data_wind_info_text">Sunset: </span>
+                            <span class="weather__data_wind_info_title">{{getDayTime(weather_data, 'sunset')}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
